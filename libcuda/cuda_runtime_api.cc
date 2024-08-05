@@ -471,6 +471,7 @@ static int get_app_cuda_version() {
     app_cuda_version = atoi(buf);
   }
   fclose(cmd);
+  app_cuda_version = 10;
   if (app_cuda_version == 0) {
     printf("Error - Cannot detect the app's CUDA version.\n");
     exit(1);
@@ -3274,6 +3275,7 @@ std::list<cuobjdumpSection *> cuda_runtime_api::pruneSectionList(
   // sections
   std::map<std::string, unsigned> cuobjdumpSectionMap;
   int min_ptx_capability_found = 0;
+  printf("SECTION LIST %d\n", cuobjdumpSectionList.size());
   for (std::list<cuobjdumpSection *>::iterator iter =
            cuobjdumpSectionList.begin();
        iter != cuobjdumpSectionList.end(); iter++) {
@@ -3595,7 +3597,7 @@ unsigned CUDARTAPI __cudaPushCallConfiguration(dim3 gridDim, dim3 blockDim,
   if (g_debug_execution >= 3) {
     announce_call(__my_func__);
   }
-  cudaConfigureCallInternal(gridDim, blockDim, sharedMem, stream);
+  return cudaConfigureCallInternal(gridDim, blockDim, sharedMem, stream);
 }
 
 cudaError_t CUDARTAPI __cudaPopCallConfiguration(dim3 *gridDim, dim3 *blockDim,
